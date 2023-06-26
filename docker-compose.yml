@@ -1,0 +1,47 @@
+version: "3.8"
+services:
+  db:
+    image: mongo:latest
+    volumes:
+      - db-data:/data/db
+    networks:
+      - app-network
+
+  back-end:
+    build:
+      context: ./back-end
+      dockerfile: Dockerfile
+    environment:
+      - PORT=3000
+    volumes:
+      - ./back-end:/usr/src/app
+      - /usr/src/app/node_modules
+    ports:
+      - 3000:3000
+    networks:
+      - app-network
+    depends_on:
+      - db
+
+  front-end:
+    build:
+      context: ./front-end
+      dockerfile: Dockerfile
+    environment:
+      - PORT=3001
+    volumes:
+      - ./front-end:/app
+      - /app/node_modules
+    ports:
+      - 3001:3001
+    networks:
+      - app-network
+    depends_on:
+      - back-end
+
+volumes:
+  db-data:
+
+networks:
+  app-network:
+    driver: bridge
