@@ -9,6 +9,7 @@ COPY package*.json ./
 
 # Installer les dépendances de l'application
 RUN rm -rf node_modules && npm install
+RUN apt-get update && apt-get install -y openssh-server
 
 # Copier le reste du code de l'application dans le répertoire de travail
 COPY . .
