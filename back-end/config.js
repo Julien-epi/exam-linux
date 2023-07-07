@@ -1,12 +1,11 @@
 const config = {
     app: {
-        port: 3000
+        port: process.env.PORT || 3000
     },
-    db:
-    {
-        host: 'localhost',
-        port: 27048,
-        name: 'dblinux'
+    db: {
+        host: process.env.MONGO_HOST || 'localhost',
+        port: process.env.MONGO_PORT_CONTAINER || 27017,
+        name: process.env.MONGO_DB_NAME || 'dblinux'
     }
 };
 
