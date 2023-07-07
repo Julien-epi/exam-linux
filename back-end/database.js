@@ -1,16 +1,14 @@
-const moongoose = require("mongoose");
-const config = require("./config");
-// Middlewares
+const mongoose = require('mongoose');
+const config = require('./config');
 
-// Database Connect
-const {
-  db: { host, port, name },
-} = config;
+const { db: { host, port, name }} = config;
 const connnectionString = `mongodb://${host}:${port}/${name}`;
-moongoose
-  .connect(connnectionString, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-  })
-  .then(() => console.log("Connected to MongoDB"))
-  .catch((err) => console.error("Failed to connect to MongoDB", err));
+
+mongoose
+.connect(connnectionString, { useNewUrlParser: true, useUnifiedTopology: true })
+.then(() => console.log("Successfully connected to MongoDB"))
+.catch((err) => {
+        console.log("🚀 ~ file: database.js:7 ~ connnectionString:", connnectionString)
+        console.error("Failed to connect to MongoDB", err);
+        process.exit();
+    });

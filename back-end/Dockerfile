@@ -9,7 +9,7 @@ COPY package*.json ./
 
 # Installer les dépendances de l'application
 RUN rm -rf node_modules && npm install
-RUN apt-get update && apt-get install -y openssh-server
+# RUN apt-get update && apt-get install -y openssh-server
 
 # Copier le reste du code de l'application dans le répertoire de travail
 COPY . .
@@ -18,4 +18,4 @@ COPY . .
 EXPOSE 3000
 
 # Définir la commande pour exécuter votre application
-CMD [ "node", "server.js" ]
+CMD [ "node", "app.js" ]
