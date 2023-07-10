@@ -1,4 +1,3 @@
----
 - name: Set up development environment
   hosts: localhost
   tasks:
@@ -34,6 +33,11 @@
       group: root
       mode: '0644'
 
+  - name: Create Fish config directory
+    ansible.builtin.file:
+      path: /root/.config/fish
+      state: directory
+
   - name: Create config.fish file
     ansible.builtin.copy:
       content: |
@@ -61,4 +65,3 @@
     ansible.builtin.git:
       repo: https://github.com/tmux-plugins/tmux-resurrect.git
       dest: ~/.tmux/plugins/tmux-resurrect
-...

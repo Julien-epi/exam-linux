@@ -1,39 +1,30 @@
-const navigation = [
-  { name: "Dashboard", href: {}, current: true },
-  { name: "Cars", href: {}, current: false },
-  { name: "Carsitters", href: {}, current: false },
-  { name: "Calendar", href: {}, current: false },
-];
-
-function classNames(...classes: any[]) {
-  return classes.filter(Boolean).join(" ");
-}
+import Link from "next/link";
 
 export default function Navbar() {
   return (
-    <>
-      <div className="mx-auto max-w-7xl px-2 sm:px-4 lg:divide-y lg:divide-gray-200 lg:px-8">
-        <nav
-          className="hidden lg:flex lg:space-x-8 lg:py-2"
-          aria-label="Global"
-        >
-          {navigation.map((item) => (
-            <a
-              key={item.name}
-              href={item.href}
-              className={classNames(
-                item.current
-                  ? "bg-gray-100 text-gray-900"
-                  : "text-gray-900 hover:bg-gray-50 hover:text-gray-900",
-                "inline-flex items-center rounded-md py-2 px-3 text-sm font-medium"
-              )}
-              aria-current={item.current ? "page" : undefined}
-            >
-              {item.name}
-            </a>
-          ))}
-        </nav>
+    <div className="sticky top-0 z-10 pb-12">
+    <div className="mx-auto px-2 bg-primary sm:px-4 lg:px-8 shadow-lg py-2">
+      <div className="relative flex items-center justify-between h-16">
+        <div className="md:flex items-center lg:px-0 flex-1">
+          <Link href="/">
+            <h1>Home</h1>
+          </Link>
+        </div>
+        <div className="hidden md:flex items-center flex-1 justify-evenly mx-6 ">
+            <Link href="/cars">
+              <h1 className="mx-6">Cars</h1>
+            </Link>
+          
+            <Link href="/carsitters">
+              <h1 className="mx-6">Carsitters</h1>
+            </Link>
+          
+            <Link href="/planning">
+              <h1 className="mx-6">Planning</h1>
+            </Link>
+        </div>
       </div>
-    </>
+    </div>
+  </div>
   );
 }

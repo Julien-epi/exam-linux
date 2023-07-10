@@ -1,51 +1,32 @@
 import axios from "axios";
 import { ICarsitter } from "../interfaces/carsitter";
 
-const API_URL = "http://localhost:3000/api/carsitter";
+const API_URL = "http://localhost:3000/api";
 
-export const getCarsitters = async (): Promise<ICarsitter[]> => {
-  try {
-    const { data } = await axios.get(`${API_URL}/Carsitters`);
-    return data;
-  } catch (error) {
-    throw new Error(`An error has occurred: ${error}`);
+class CarsitterService {
+  getAllCarsitters() {
+    return axios.get<ICarsitter[]>(API_URL + "/carSistters/AllCarSistters");
   }
-};
 
-export const getCarsitter = async (id: number): Promise<ICarsitter> => {
-  try {
-    const { data } = await axios.get(`${API_URL}/Carsitter/${id}`);
-    return data;
-  } catch (error) {
-    throw new Error(`An error has occurred: ${error}`);
+  deleteCarsitter(id: string) {
+    return axios.delete(API_URL + `/carSistters/delete/${id}`);
   }
-}
 
-export const addCarsitter = async (Carsitter: ICarsitter): Promise<ICarsitter> => {
-  try {
-    const { data } = await axios.post(`${API_URL}/Carsitter`, Carsitter);
-    return data;
-  } catch (error) {
-    throw new Error(`An error has occurred: ${error}`);
+  getCarsitterById(id: string) {
+    return axios.get<ICarsitter>(API_URL + `/carSistters/findCarSitterById/${id}`);
   }
-}
+  
+  getCarsittersByIds(ids: string[]) {
+    return axios.post<ICarsitter[]>(API_URL + "/carSistters/findCarsittersByIds", { ids });
+  }
 
-export const updateCarsitter = async (Carsitter: ICarsitter): Promise<ICarsitter> => {
-  try {
-    const { data } = await axios.put(`${API_URL}/Carsitter/${Carsitter.id}`, Carsitter);
-    return data;
-  } catch (error) {
-    throw new Error(`An error has occurred: ${error}`);
+  addCarsitter(carsitterData: ICarsitter) {
+    return axios.post<ICarsitter>(API_URL + "/carSistters/register", carsitterData);
+  }
+
+  updateCarsitter(id: string, modifyData: ICarsitter) {
+    return axios.put<ICarsitter>(API_URL + `/carSistters/update/${id}`, modifyData);
   }
 }
 
-export const deleteCarsitter = async (id: number): Promise<ICarsitter> => {
-  try {
-    const { data } = await axios.delete(`${API_URL}/Carsitter/${id}`);
-    return data;
-  } catch (error) {
-    throw new Error(`An error has occurred: ${error}`);
-  }
-}
-
-
+export default new CarsitterService();

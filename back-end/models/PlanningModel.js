@@ -3,12 +3,7 @@ const mongoose = require("mongoose");
 const PlanningSchema = new mongoose.Schema({
   carsitterId: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: "User",
-    required: true,
-  },
-  carId: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "Car",
+    ref: "CarSistters",
     required: true,
   },
   startTime: {

@@ -1,9 +1,12 @@
 version: "3.8"
+
 services:
   db:
     image: mongo:latest
     volumes:
       - db-data:/data/db
+    ports:
+      - 27017:27017
     networks:
       - app-network
 
@@ -13,6 +16,10 @@ services:
       dockerfile: Dockerfile
     environment:
       - PORT=3000
+      - MONGO_HOST=db
+      - MONGO_PORT_CONTAINER=27017
+      - MONGO_DB_NAME=dblinux
+      - DOCKER_ENV=1 
     volumes:
       - ./back-end:/usr/src/app
       - /usr/src/app/node_modules
@@ -22,13 +29,14 @@ services:
       - app-network
     depends_on:
       - db
-
+      
   front-end:
     build:
       context: ./front-end
       dockerfile: Dockerfile
     environment:
       - PORT=3001
+      - REACT_APP_API_URL=http://localhost:3000/api
     volumes:
       - ./front-end:/app
       - /app/node_modules
@@ -38,6 +46,25 @@ services:
       - app-network
     depends_on:
       - back-end
+
+  backup:
+    build:
+      context: ./cron
+      dockerfile: Dockerfile
+    environment:
+      - TZ=Europe/Paris
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    networks:
+      - app-network
+    depends_on:
+      - db
+
+  ansible:
+    build: 
+      context: ./ansible
+    networks:
+      - app-network
 
 volumes:
   db-data:
