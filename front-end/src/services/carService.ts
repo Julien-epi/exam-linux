@@ -1,51 +1,29 @@
 import axios from "axios";
 import { ICar } from "../interfaces/car";
 
-const API_URL = "http://localhost:3000/api/car";
+const API_URL = "http://localhost:3000/api";
 
-export const getCars = async (): Promise<ICar[]> => {
-  try {
-    const { data } = await axios.get(`${API_URL}/cars`);
-    return data;
-  } catch (error) {
-    throw new Error(`An error has occurred: ${error}`);
+class CarService {
+  getAllCars() {
+    return axios.get<ICar[]>(API_URL + "/car/Allcars");
   }
-};
 
-export const getCar = async (id: number): Promise<ICar> => {
-  try {
-    const { data } = await axios.get(`${API_URL}/car/${id}`);
-    return data;
-  } catch (error) {
-    throw new Error(`An error has occurred: ${error}`);
+  deleteCar(id: string) {
+    return axios.delete<ICar[]>(API_URL + `/car/delete/${id}`);
   }
-}
 
-export const addCar = async (car: ICar): Promise<ICar> => {
-  try {
-    const { data } = await axios.post(`${API_URL}/car`, car);
-    return data;
-  } catch (error) {
-    throw new Error(`An error has occurred: ${error}`);
+  getCarById(id: string) {
+    return axios.get<ICar>(API_URL + `/car/findCarById/${id}`);
+  }
+  
+
+  addCar(carData: ICar) {
+    return axios.post<ICar>(API_URL + "/car/register", carData);
+  }
+
+  updateCar(id: string, modifyData: ICar) {
+    return axios.put<ICar>(API_URL + `/car/update/${id}`, modifyData);
   }
 }
 
-export const updateCar = async (car: ICar): Promise<ICar> => {
-  try {
-    const { data } = await axios.put(`${API_URL}/car/${car.id}`, car);
-    return data;
-  } catch (error) {
-    throw new Error(`An error has occurred: ${error}`);
-  }
-}
-
-export const deleteCar = async (id: number): Promise<ICar> => {
-  try {
-    const { data } = await axios.delete(`${API_URL}/car/${id}`);
-    return data;
-  } catch (error) {
-    throw new Error(`An error has occurred: ${error}`);
-  }
-}
-
-
+export default new CarService();

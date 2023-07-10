@@ -2,15 +2,15 @@ const Planning = require("../models/PlanningModel");
 
 // Function to create a planning slot
 exports.createSlot = (req, res) => {
-  const { carsitterId, carId, startTime, endTime } = req.body;
+  const { carsitterId, startTime, endTime } = req.body;
 
   // Validate user input
-  if (!(carsitterId && carId && startTime && endTime)) {
+  if (!(carsitterId && startTime && endTime)) {
     return res.status(400).send("All input is required");
   }
 
   // Create a new planning slot
-  const newSlot = new Planning({ carsitterId, carId, startTime, endTime });
+  const newSlot = new Planning({ carsitterId, startTime, endTime });
   newSlot
     .save()
     .then(() => res.status(200).json({ msg: "Planning slot created" }))
@@ -20,11 +20,11 @@ exports.createSlot = (req, res) => {
 // Function to update a planning slot
 exports.updateSlot = (req, res) => {
   const { id } = req.params;
-  const { carsitterId, carId, startTime, endTime } = req.body;
+  const { carsitterId, startTime, endTime } = req.body;
 
-  Planning.findOneAndUpdate(
-    { _id: id },
-    { carsitterId, carId, startTime, endTime },
+  Planning.findByIdAndUpdate(
+    id,
+    { carsitterId, startTime, endTime },
     { new: true }
   )
     .then(() => res.status(200).send("Update successful"))
@@ -35,18 +35,21 @@ exports.updateSlot = (req, res) => {
 exports.deleteSlot = (req, res) => {
   const { id } = req.params;
 
-  Planning.findOneAndRemove({ _id: id })
+  Planning.findByIdAndRemove(id)
     .then(() => res.status(200).send("Planning slot deleted successfully"))
     .catch((err) => res.status(500).send(err.message));
 };
 
 // Function to get all planning slots
 exports.getAllSlots = (req, res) => {
-  Planning.find()
-    .populate("carId")
+  Planning.find({})
     .populate("carsitterId")
-    .then((slots) => res.status(200).json(slots))
-    .catch((err) => res.status(500).send(err.message));
+    .then((slots) => {
+      res.status(200).json(slots);
+    })
+    .catch((err) => {
+      res.status(500).json({ msg: err.message });
+    });
 };
 
 // Function to get a specific planning slot
@@ -54,7 +57,6 @@ exports.getSlotById = (req, res) => {
   const { id } = req.params;
 
   Planning.findById(id)
-    .populate("carId")
     .populate("carsitterId")
     .then((slot) => {
       if (slot) {

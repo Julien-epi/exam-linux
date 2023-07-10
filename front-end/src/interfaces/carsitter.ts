@@ -1,5 +1,6 @@
 export interface ICarsitter {
-  id: number;
-  name: string;
-  image: string;
+  _id: string;
+  firstname: string;
+  lastname: string;
+  contactInfo: string;
 }
